@@ -1,0 +1,48 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace ChallengeApp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var Items = new Items("Chleb");
+
+            /* var numbers = new double[3];
+             numbers[1] = 13.43;
+             numbers[2] = 34.28;
+             numbers[3] = 28.02;*/
+
+            var numbers = new[] { 12.4, 3, 4.332, 5.865 };
+
+            /* var result = numbers[0];
+             result += numbers[1];
+             result += numbers[2];
+             result += numbers[3];
+             Console.WriteLine(result);*/
+            double result = 0;
+
+            foreach (var n in numbers)
+            {
+                result += n;
+            }
+            var numbers2 = new List<double>() { 23.22, 45.32, 65.66, 33.23 };
+            numbers2.Add(33);
+            result = 0.0;
+            foreach (var n in numbers2)
+            {
+                result += n;
+            }
+            double average = result / numbers2.Count;
+
+            Console.WriteLine($"Suma wszyskich elementów listy jest równa : {result:N2}");
+            Console.WriteLine($"Średnia elementów listy jest równa : {average:N2}");
+
+            if (args.Length > 0)
+            {
+                // Console.WriteLine("Suma :" + result);
+            }
+        }
+    }
+}

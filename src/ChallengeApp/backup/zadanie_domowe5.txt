@@ -1,0 +1,32 @@
+/*Dzień 5: Tablice, Listy i Klasy ; Zadanie domowe */
+using System;
+using System.Collections.Generic;
+
+namespace ChallengeApp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var productName = new List<string>(2);
+            productName.Add("Masło");
+            productName.Add("Chleb");
+
+            var price = new List<int>(3);
+            price.Add(6);
+            price.Add(7);
+            price.Add(4);
+
+            foreach (var n in productName)
+            {
+                Console.WriteLine(n);
+                foreach (var m in price)
+                {
+                    Console.WriteLine(m);
+                }
+            }
+        }
+    }
+}
+/*Pomysł na zadanie po lekcji 3,4,5 : Zebaranie cen artykułów codziennej potrzeby z różnych okresów w ciągu ostatniego roku,
+ wyliczenie wzrostu/spadku ceny w ciągu roku, średniej rocznej ceny i posortowanie ich względem wartości.*/

@@ -1,0 +1,101 @@
+/*Dzień 12: Switch’e i Wyjątki*/
+using System;
+using System.Collections.Generic;
+
+namespace ChallengeApp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            while (true)
+            {
+                try
+                {
+                    var employee = new Employee("Adam");
+                    Console.WriteLine("---------------------------------");
+                    Console.WriteLine("Menu :");
+                    Console.WriteLine("q - wyjście");
+                    Console.WriteLine("---------------------------------");
+                    Console.WriteLine($"Witaj! Podaj ocenę dla {employee.Name}");
+                    var input = Console.ReadLine();
+                    if (input == "q")
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        employee.AddGradePlus(input);
+                        // Console.WriteLine($"Dodano ocenę {input}");
+                        var stats = employee.GetStatistics();
+                        Console.WriteLine($"");
+                        Console.WriteLine($"******************Statystykai***********************");
+                        Console.WriteLine($"Na temat pracownika {employee.Name} mamy informacje : ");
+                        Console.WriteLine($"Średnia ocena jest równa : {stats.Average}");
+                        Console.WriteLine($"Najniż1sza ocena jest równa : {stats.Low}");
+                        Console.WriteLine($"Najwyższa ocena jest równa  : {stats.High}");
+                        Console.WriteLine($"Przypisana litera to  : {stats.Letter}");
+                        Console.WriteLine($"END ***************  Statystykai******************** END");
+                        Console.WriteLine($"");
+                    }
+                }
+                catch (FormatException ex)
+                {
+                    Console.WriteLine($"Niestety wprowadziłeś nieprawidłowy znak. Błąd : " + ex.Message + " Wprowadź ocenę która jest cyfrą lub cyfrą z +/-.");
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine($"Niestety wprowadziłeś liczbę z poza zakresu. Błąd :" + ex.Message + " Wprowadź ocenę ponownie.");
+                }
+                finally
+                {
+                    // Console.WriteLine("Finnaly się wyświetla");
+                }
+            }
+            /* var employee = new Employee("Adam");
+             //employee.PairLists();
+             employee.AddGrade(24.4);
+             employee.AddGrade(36.6);
+
+             var stat = employee.GetStatistics();
+             Console.WriteLine($"Na temat pracownika {employee.Name} mamy informacje : ");
+             Console.WriteLine($"Średnia ocena jest równa : {stat.Average:N2}");
+             Console.WriteLine($"Najniższa ocena jest równa : {stat.Low}");
+             Console.WriteLine($"Najwyższa ocena jest równa  : {stat.High}");
+
+             var employee1 = new Employee("Ewa");
+             employee1.AddGrade(10);
+             employee1.AddGrade(48);
+             var stat1 = employee1.GetStatistics();
+
+             Console.WriteLine($"Na temat pracownika {employee1.Name} mamy informacje : ");
+             Console.WriteLine($"Średnia ocena jest równa : {stat1.Average:N2}");
+             Console.WriteLine($"Najniższa ocena jest równa : {stat1.Low}");
+             Console.WriteLine($"Najwyższa ocena jest równa  : {stat1.High}");
+
+             var employee2 = new Employee("Janusz");
+             employee2.AddGrade(4.23);
+             employee2.AddGrade(3.38);
+             employee2.AddGrade(18.27);
+             employee2.AddGrade(14.29);
+             employee2.AddGrade("52");
+             employee2.AddGrade("cztery");
+
+             var stat2 = employee2.GetStatistics();
+             Console.WriteLine($"Na temat pracownika {employee2.Name} mamy informacje : ");
+             employee2.ChangeName("Kryspin");
+             employee2.ChangeName("Zby3szz3k");
+             Console.WriteLine($"Średnia ocena jest równa : {stat2.Average:N2}");
+             Console.WriteLine($"Najniższa ocena jest równa : {stat2.Low}");
+             Console.WriteLine($"Najwyższa ocena jest równa  : {stat2.High}");
+ */
+            /*var users = new[] { "Adam", "Stefan", "Antoni", "Tomek", "Krystian", "Leszek", "Marek", "Paweł", "Piotr", "Szymon" };
+             var age = new[] { 23, 34, 32, 22, 26, 60, 53, 49, 36, 70 };
+             int k = 0;   
+             for (k = 0; k < 10; k++)
+             {
+                 Console.WriteLine(users[k] + " " + age[k]);
+             }*/
+        }
+    }
+}

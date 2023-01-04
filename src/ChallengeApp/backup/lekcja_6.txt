@@ -1,0 +1,32 @@
+﻿/*Dzień 6: Metody w klasie */
+using System;
+using System.Collections.Generic;
+
+namespace ChallengeApp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var employee = new Employee("Adam");
+            employee.AddGrade(24.4);
+            employee.AddGrade(36.6);
+
+            var stat = employee.GetStatistics();
+            Console.WriteLine($"Na temat pracownika {employee.name} mamy informacje : ");
+            Console.WriteLine($"Średnia ocena jest równa : {stat.Average:N2}");
+            Console.WriteLine($"Najniższa ocena jest równa : {stat.Low}");
+            Console.WriteLine($"Najwyższa ocena jest równa  : {stat.High}");
+
+            var employee1 = new Employee("Ewa");
+            employee1.AddGrade(10);
+            employee1.AddGrade(48);
+            var stat1 = employee1.GetStatistics();
+
+            Console.WriteLine($"Na temat pracownika {employee1.name} mamy informacje : ");
+            Console.WriteLine($"Średnia ocena jest równa : {stat1.Average:N2}");
+            Console.WriteLine($"Najniższa ocena jest równa : {stat1.Low}");
+            Console.WriteLine($"Najwyższa ocena jest równa  : {stat1.High}");
+        }
+    }
+}
