@@ -1,4 +1,0 @@
-  /*launch.json*/          "program": "${workspaceFolder}/src/ChallengeApp/bin/Debug/net5.0/ChallengeApp.dll",
-/* tasks*/ "args": [
-                "build",
-                "${workspaceFolder}/src/ChallengeApp/ChallengeApp.csproj",
