@@ -78,27 +78,26 @@ namespace ChallengeApp
         public void AddGradePlus(string grade)
         {
             var gradeEmpty = grade.Replace("+", String.Empty).Replace("-", String.Empty);
-            var gradeDouble = double.Parse(gradeEmpty);          
+            var gradeDouble = double.Parse(gradeEmpty);
 
-            if (grade.Length == 2 && char.IsDigit(grade[0]) && grade[0] >= '1' && grade[0] <= '6' && grade.Contains("+") || grade.Contains("-"))
+
+            switch (grade[1])
             {
-                switch (grade[1])
-                {
-                    case '+':
-                        gradeDouble += 0.5;
-                        AddGrade(gradeDouble);
-                        Console.WriteLine($"Dodano ocenę " + gradeDouble);
-                        break;
-                    case '-':
-                        gradeDouble -= 0.25;
-                        AddGrade(gradeDouble);
-                        Console.WriteLine($"Dodano ocenę " + gradeDouble);
-                        break;
-                }
+                case '+':
+                    gradeDouble += 0.5;
+                    Console.WriteLine($"Dodano ocenę " + gradeDouble);
+                    break;
+                case '-':
+                    gradeDouble -= 0.25;
+
+                    Console.WriteLine($"Dodano ocenę " + gradeDouble);
+                    break;
             }
-            else if (grade.Length == 1 && char.IsDigit(grade[0]) && gradeDouble >= 1 && gradeDouble <= 6)
+
+            if (0 < gradeDouble && gradeDouble <= 6)
+
             {
-                AddGrade(grade);                
+                AddGrade(grade);
             }
             else
             {
