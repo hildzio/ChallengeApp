@@ -60,12 +60,10 @@ namespace ChallengeApp
                     break;
             }
         }
-        public void AddGrade(string gradeName)
-        {
-            double grade;
-            Double.TryParse(gradeName, out grade);
 
-            if (!Double.IsNaN(grade) && grade != 0)
+        public void AddGrade(string input)
+        {
+            if (double.TryParse(input, out var grade))
             {
                 this.grades.Add(grade);
                 Console.WriteLine($"Dodano do listy ocen : " + grade);
@@ -75,27 +73,41 @@ namespace ChallengeApp
                 Console.WriteLine("Błąd ! Nie można przekonwertować zmiennej na docelową ocenę");
             }
         }
-        public void AddGradePlus(string grade)
+
+        public void AddGradePlus(string input)
         {
-            var gradeEmpty = grade.Replace("+", String.Empty).Replace("-", String.Empty);
-            var gradeDouble = double.Parse(gradeEmpty);
+            var clearedInput = input.Replace("+", string.Empty).Replace("-", string.Empty);
+            var grade = double.Parse(clearedInput);
 
+            char sign;
 
-            switch (grade[1])
+            if (input.Contains('+'))
+            {
+                sign = '+';
+            }
+            else if (input.Contains('-'))
+            {
+                sign = '-';
+            }
+            else
+            {
+                sign = new char();
+            }
+
+            switch (sign)
             {
                 case '+':
-                    gradeDouble += 0.5;
-                    Console.WriteLine($"Dodano ocenę " + gradeDouble);
+                    grade += 0.5;
+                    Console.WriteLine($"Dodano ocenę " + input);
                     break;
                 case '-':
-                    gradeDouble -= 0.25;
+                    grade -= 0.25;
 
-                    Console.WriteLine($"Dodano ocenę " + gradeDouble);
+                    Console.WriteLine($"Dodano ocenę " + input);
                     break;
             }
 
-            if (0 < gradeDouble && gradeDouble <= 6)
-
+            if (0 < grade && grade <= 6)
             {
                 AddGrade(grade);
             }
@@ -104,6 +116,7 @@ namespace ChallengeApp
                 Console.WriteLine("Wprowadź poprawny format oceny. Wprowadzona ocena nie składa się z cyfry ; z cyfry z + lub - ; jest poza zakresem (1 - 6). Spróbuj jeszcze raz.");
             }
         }
+
         public string Name
         {
             get
@@ -111,6 +124,7 @@ namespace ChallengeApp
                 return this.name;
             }
         }
+
         public Statistics GetStatistics()
         {
             var result = new Statistics();
