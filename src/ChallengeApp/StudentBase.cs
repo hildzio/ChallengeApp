@@ -6,11 +6,6 @@ namespace ChallengeApp
 {
     public abstract class StudentBase : Person, IStudent
     {
-        private const string constFileName = "adam_kowalski.txt";
-        private static string GetFileName()
-        {
-            return constFileName;
-        }
         public List<double> grades { get; set; }
         public StudentBase(string forname, string surname) : base(forname, surname)
         {
@@ -32,8 +27,8 @@ namespace ChallengeApp
         public abstract void AddGrade(double grade);
         public abstract void AddGrade(string gradeName);
         public abstract void AddGradePlus(string grade);
-        public abstract void AddGradeToFile(string grade);
+        public abstract void AddGradeToFile(string grade, string fullFileName);
+        public abstract Statistics GetStatistics(string fullFileName);
         public abstract Statistics GetStatistics();
-
     }
 }

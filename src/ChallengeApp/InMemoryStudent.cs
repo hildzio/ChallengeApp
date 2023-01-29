@@ -6,11 +6,6 @@ namespace ChallengeApp
 {
     public class InMemoryStudent : StudentBase
     {
-        private const string constFileName = "adam_kowalski.txt";
-        private static string GetFileName()
-        {
-            return constFileName;
-        }
         public InMemoryStudent(string forname, string surname) : base(forname, surname)
         {
             grades = new List<double>();
@@ -87,7 +82,7 @@ namespace ChallengeApp
                 Console.WriteLine("Wprowadź poprawny format oceny. Wprowadzona ocena nie składa się z cyfry ; z cyfry z + lub - ; jest poza zakresem (1 - 6). Spróbuj jeszcze raz.");
             }
         }
-        public override void AddGradeToFile(string grade)
+        public override void AddGradeToFile(string grade, string fullFileName)
         {
             var gradeToFile = Console.ReadLine();
             var gradeEmpty = gradeToFile.Replace("+", String.Empty).Replace("-", String.Empty);
@@ -132,39 +127,26 @@ namespace ChallengeApp
                 Console.WriteLine("Wprowadź poprawny format oceny. Wprowadzona ocena nie składa się z cyfry ; z cyfry z + lub - ; jest poza zakresem (1 - 6). Spróbuj jeszcze raz.");
             }
         }
-        public void AddToFile(double grade)
-        {
-            using (var writer = File.AppendText($"{GetFileName()}"))
-            {
-                writer.WriteLine(grade);
-                Console.WriteLine($"Dopisano {grade} do pliku {GetFileName()} ");
-            }
-            using (var writer1 = File.AppendText("audit.txt"))
-            {
-                writer1.WriteLine($"{grade}        {DateTime.UtcNow}");
-                Console.WriteLine($"Dopisano {grade} do pliku audit.txt z datą {DateTime.UtcNow} ");
-            }
-        }
-
-        /*public override void AddNameGradeToFile(string forname, string surname, double grade)
-        {
-            using (var writer = File.AppendText($"{forname}_{surname}.txt"))
-            {
-                writer.WriteLine(grade);
-                if (SendMessageLessThenThree != null)
-                {
-                    SendMessageLessThenThree(this, new EventArgs());
-                }
-            }
-        }*/
+        public static void AddToFile(double grade) { }
         public override Statistics GetStatistics()
         {
-            var result = new Statistics();
-            for (var i = 0; i < grades.Count; i += 1)
+            var statistics = new Statistics();
+            for (var i = 0; i < grades.Count; i++)
             {
-                result.Add(grades[i]);
+                statistics.Add(grades[i]);
             }
-            return result;
+            Console.WriteLine($"TOP **************** Statystyki ******************* TOP\n" +
+                              $"Na temat ucznia mamy informacje : \n" +
+                              $"Średnia ocen jest równa : {statistics.Average}\n" +
+                              $"Najniż1sza ocena jest równa : {statistics.Low}\n" +
+                              $"Najwyższa ocena jest równa  : {statistics.High}\n" +
+                              $"END ***************  Statystyki ******************* END\n\n");
+            return statistics;
+        }
+        public override Statistics GetStatistics(string fullFileName)
+        {
+            var statistics = new Statistics();
+            return statistics;
         }
     }
 }

@@ -32,21 +32,5 @@ namespace ChallengeApp
             Low = Math.Min(number, Low);
             High = Math.Max(number, High);
         }
-        public Statistics GetStatistics()
-        {
-            var result = new Statistics();
-            for (var i = 0; i < grades.Count; i ++)
-            {
-                result.Add(grades[i]);
-            }
-            return result;   
-/*
-            Console.WriteLine("TOP **************** Statystyki ******************* TOP");
-            Console.WriteLine("Na temat ucznia mamy informacje : ");
-            Console.WriteLine($"Średnia ocen jest równa : {result.Average}");
-            Console.WriteLine($"Najniż1sza ocena jest równa : {result.Low}");
-            Console.WriteLine($"Najwyższa ocena jest równa  : {result.High}");
-            Console.WriteLine("END ***************  Statystyki ******************* END\n");    */    
-        }
     }
 }

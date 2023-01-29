@@ -1,17 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-//using System.IO.File;
+using System.Linq;
 
 namespace ChallengeApp
 {
     public class SavedStudent : StudentBase
     {
-        private const string constFileName = "adam_kowalski.txt";
-        private static string GetFileName()
-        {
-            return constFileName;
-        }
         public SavedStudent(string forname, string surname) : base(forname, surname)
         {
             grades = new List<double>();
@@ -87,7 +82,7 @@ namespace ChallengeApp
                 Console.WriteLine("Wprowadź poprawny format oceny. Wprowadzona ocena nie składa się z cyfry ; z cyfry z + lub - ; jest poza zakresem (1 - 6). Spróbuj jeszcze raz.");
             }
         }
-        public override void AddGradeToFile(string grade)
+        public override void AddGradeToFile(string grade, string fullFileName)
         {
             var gradeToFile = grade;
             var gradeEmpty = gradeToFile.Replace("+", String.Empty).Replace("-", String.Empty);
@@ -99,7 +94,7 @@ namespace ChallengeApp
                 {
                     case '+':
                         gradeDouble += 0.5;
-                        AddToFile(gradeDouble);
+                        AddToFile(gradeDouble, fullFileName);
                         Console.WriteLine($"Dodano ocenę do pliku " + gradeDouble);
                         if (SendMessageLessThenThree != null && gradeDouble < 3)
                         {
@@ -109,7 +104,7 @@ namespace ChallengeApp
 
                     case '-':
                         gradeDouble -= 0.25;
-                        AddToFile(gradeDouble);
+                        AddToFile(gradeDouble, fullFileName);
                         Console.WriteLine($"Dodano ocenę do pliku " + gradeDouble);
                         if (SendMessageLessThenThree != null && gradeDouble < 3)
                         {
@@ -120,7 +115,7 @@ namespace ChallengeApp
             }
             else if (gradeToFile.Length == 1 && char.IsDigit(gradeToFile[0]) && gradeDouble >= 1 && gradeDouble <= 6)
             {
-                AddToFile(gradeDouble);
+                AddToFile(gradeDouble, fullFileName);
                 if (SendMessageLessThenThree != null && gradeDouble < 3)
                 {
                     SendMessageLessThenThree(this, new EventArgs());
@@ -131,12 +126,12 @@ namespace ChallengeApp
                 Console.WriteLine("Wprowadź poprawny format oceny. Wprowadzona ocena nie składa się z cyfry ; z cyfry z + lub - ; jest poza zakresem (1 - 6). Spróbuj jeszcze raz.");
             }
         }
-        public void AddToFile(double grade)
+        public void AddToFile(double grade, string fullFileName)
         {
-            using (var writer = File.AppendText($"{GetFileName()}"))
+            using (var writer = File.AppendText(fullFileName))
             {
                 writer.WriteLine(grade);
-                Console.WriteLine($"Dopisano {grade} do pliku {GetFileName()} ");
+                Console.WriteLine($"Dopisano {grade} do pliku {fullFileName} ");
             }
             using (var writer1 = File.AppendText("audit.txt"))
             {
@@ -144,16 +139,30 @@ namespace ChallengeApp
                 Console.WriteLine($"Dopisano {grade} do pliku audit.txt z datą {DateTime.UtcNow} ");
             }
         }
+        public override Statistics GetStatistics(string fullFileName)
+        {
+            var statistics = new Statistics();
+            using (StreamReader sr = File.OpenText(fullFileName))
+            {
+                string gradeInString;
+                while ((gradeInString = sr.ReadLine()) != null)
+                {
+                    var gradeInDouble = double.Parse(gradeInString);
+                    statistics.Add(gradeInDouble);
+                }
+            }
+            Console.WriteLine($"TOP **************** Statystyki ******************* TOP\n" +
+                              $"Na temat ucznia mamy informacje : \n" +
+                              $"Średnia ocen jest równa : {statistics.Average}\n" +
+                              $"Najniż1sza ocena jest równa : {statistics.Low}\n" +
+                              $"Najwyższa ocena jest równa  : {statistics.High}\n" +
+                              $"END ***************  Statystyki ******************* END\n\n");
+            return statistics;
+        }
         public override Statistics GetStatistics()
         {
-            {
-                var result = new Statistics();
-                for (var i = 0; i < grades.Count; i += 1)
-                {
-                    result.Add(grades[i]);
-                }
-                return result;
-            }
+            var statistics = new Statistics();
+            return statistics;
         }
     }
 }
