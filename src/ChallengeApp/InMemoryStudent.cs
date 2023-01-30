@@ -8,10 +8,10 @@ namespace ChallengeApp
     {
         public InMemoryStudent(string forname, string surname) : base(forname, surname)
         {
-            grades = new List<double>();
+            grades = new List<float>();
         }
         public override event LessThenTreeDelegate SendMessageLessThenThree;
-        public override void AddGrade(double grade)
+        public override void AddGrade(float grade)
         {
             if (grade >= 0 && grade <= 100)
             {
@@ -29,9 +29,9 @@ namespace ChallengeApp
         }
         public override void AddGrade(string gradeName)
         {
-            Double.TryParse(gradeName, out var grade);
+            float.TryParse(gradeName, out var grade);
 
-            if (!Double.IsNaN(grade) && grade != 0)
+            if (!float.IsNaN(grade) && grade != 0)
             {
                 this.grades.Add(grade);
                 Console.WriteLine($"Dodano do listy ocen : " + grade);
@@ -42,37 +42,37 @@ namespace ChallengeApp
         public override void AddGradePlus(string grade)
         {
             var gradeEmpty = grade.Replace("+", String.Empty).Replace("-", String.Empty);
-            var gradeDouble = double.Parse(gradeEmpty);
+            var gradeFloat = float.Parse(gradeEmpty);
 
             if (grade.Length == 2 && char.IsDigit(grade[0]) && grade[0] >= '1' && grade[0] <= '6' && (grade.Contains("+") || grade.Contains("-")))
             {
                 switch (grade[1])
                 {
                     case '+':
-                        gradeDouble += 0.5;
-                        AddGrade(gradeDouble);
-                        Console.WriteLine($"Dodano ocenę : " + gradeDouble);
-                        if (SendMessageLessThenThree != null && gradeDouble < 3)
+                        gradeFloat += 0.50f;
+                        AddGrade(gradeFloat);
+                        Console.WriteLine($"Dodano ocenę : " + gradeFloat);
+                        if (SendMessageLessThenThree != null && gradeFloat < 3)
                         {
                             SendMessageLessThenThree(this, new EventArgs());
                         }
                         break;
 
                     case '-':
-                        gradeDouble -= 0.25;
-                        AddGrade(gradeDouble);
-                        Console.WriteLine($"Dodano ocenę " + gradeDouble);
-                        if (SendMessageLessThenThree != null && gradeDouble < 3)
+                        gradeFloat -= 0.25f;
+                        AddGrade(gradeFloat);
+                        Console.WriteLine($"Dodano ocenę " + gradeFloat);
+                        if (SendMessageLessThenThree != null && gradeFloat < 3)
                         {
                             SendMessageLessThenThree(this, new EventArgs());
                         }
                         break;
                 }
             }
-            else if (grade.Length == 1 && char.IsDigit(grade[0]) && gradeDouble >= 1 && gradeDouble <= 6)
+            else if (grade.Length == 1 && char.IsDigit(grade[0]) && gradeFloat >= 1 && gradeFloat <= 6)
             {
                 AddGrade(grade);
-                if (SendMessageLessThenThree != null && gradeDouble < 3)
+                if (SendMessageLessThenThree != null && gradeFloat < 3)
                 {
                     SendMessageLessThenThree(this, new EventArgs());
                 }
@@ -82,52 +82,6 @@ namespace ChallengeApp
                 Console.WriteLine("Wprowadź poprawny format oceny. Wprowadzona ocena nie składa się z cyfry ; z cyfry z + lub - ; jest poza zakresem (1 - 6). Spróbuj jeszcze raz.");
             }
         }
-        public override void AddGradeToFile(string grade, string fullFileName)
-        {
-            var gradeToFile = Console.ReadLine();
-            var gradeEmpty = gradeToFile.Replace("+", String.Empty).Replace("-", String.Empty);
-            var gradeDouble = double.Parse(gradeEmpty);
-
-            if (gradeToFile.Length == 2 && char.IsDigit(gradeToFile[0]) && gradeToFile[0] >= '1' && gradeToFile[0] <= '6' && (gradeToFile.Contains("+") || gradeToFile.Contains("-")))
-            {
-                switch (gradeToFile[1])
-                {
-                    case '+':
-                        gradeDouble += 0.5;
-                        AddToFile(gradeDouble);
-                        Console.WriteLine($"Dodano ocenę test " + gradeDouble);
-                        if (SendMessageLessThenThree != null && gradeDouble < 3)
-                        {
-                            SendMessageLessThenThree(this, new EventArgs());
-                        }
-                        break;
-
-                    case '-':
-                        gradeDouble -= 0.25;
-                        AddToFile(gradeDouble);
-                        Console.WriteLine($"Dodano ocenę " + gradeDouble);
-                        if (SendMessageLessThenThree != null && gradeDouble < 3)
-                        {
-                            SendMessageLessThenThree(this, new EventArgs());
-                        }
-                        break;
-                }
-            }
-            else if (gradeToFile.Length == 1 && char.IsDigit(gradeToFile[0]) && gradeDouble >= 1 && gradeDouble <= 6)
-            {
-                AddToFile(gradeDouble);
-
-                if (SendMessageLessThenThree != null && gradeDouble < 3)
-                {
-                    SendMessageLessThenThree(this, new EventArgs());
-                }
-            }
-            else
-            {
-                Console.WriteLine("Wprowadź poprawny format oceny. Wprowadzona ocena nie składa się z cyfry ; z cyfry z + lub - ; jest poza zakresem (1 - 6). Spróbuj jeszcze raz.");
-            }
-        }
-        public static void AddToFile(double grade) { }
         public override Statistics GetStatistics()
         {
             var statistics = new Statistics();
@@ -137,12 +91,14 @@ namespace ChallengeApp
             }
             Console.WriteLine($"TOP **************** Statystyki ******************* TOP\n" +
                               $"Na temat ucznia mamy informacje : \n" +
-                              $"Średnia ocen jest równa : {statistics.Average}\n" +
+                              $"Średnia ocen jest równa : {statistics.Average:N2}\n" +
                               $"Najniż1sza ocena jest równa : {statistics.Low}\n" +
                               $"Najwyższa ocena jest równa  : {statistics.High}\n" +
                               $"END ***************  Statystyki ******************* END\n\n");
             return statistics;
         }
+        public override void AddGradeToFile(string grade, string fullFileName) { }
+        public static void AddToFile(float grade) { }
         public override Statistics GetStatistics(string fullFileName)
         {
             var statistics = new Statistics();

@@ -86,6 +86,7 @@ namespace ChallengeApp
                                 if (inputToFile == "q")
                                 {
                                     backToMenu = true;
+                                    backFromFile = true;
                                     break;
                                 }
                                 else if (inputToFile.Length > 0 && inputToFile.Length <= 2 && char.IsDigit(inputToFile[0]))
@@ -95,14 +96,15 @@ namespace ChallengeApp
                                     using (StreamReader sr = File.OpenText(fullFileName))
                                     {
                                         var line = sr.ReadLine();
-                                        StringBuilder GradesList = new StringBuilder();
-
+                                        string GradesFileList = "";
                                         while (line != null)
                                         {
-                                            GradesList.Append($"{line}, ");
+                                            GradesFileList += ($"{line}; ");
                                             line = sr.ReadLine();
                                         }
-                                        Console.WriteLine($"{GradesList}\n\n");
+                                        GradesFileList = GradesFileList.TrimEnd();
+                                        GradesFileList = GradesFileList.TrimEnd(';');
+                                        Console.WriteLine($"{GradesFileList}\n\n");
                                     }
                                     savedStudent.GetStatistics(fullFileName);
                                 }
@@ -160,7 +162,7 @@ namespace ChallengeApp
                                 {
                                     inMemoryStudent.AddGradePlus(inputGradeToMemory);
                                     Console.WriteLine($"Dla studenta {inMemoryStudent.Forname} {inMemoryStudent.Surname} przypisane są oceny : ");
-                                    List<double> inMemoryGrades = new List<double>();
+                                    List<float> inMemoryGrades = new List<float>();
                                     inMemoryGrades = inMemoryStudent.grades;
                                     string GradesMemoryList = "";
                                     for (var i = 0; i < inMemoryGrades.Count; i++)

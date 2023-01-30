@@ -6,26 +6,26 @@ namespace ChallengeApp
 {
     public class Statistics
     {
-        public double High;
-        public double Low;
-        public double Total;
+        public float High;
+        public float Low;
+        public float Total;
         public int Count;
-        public List<double> grades { get; set; }
+        public List<float> grades { get; set; }
         public Statistics()
         {
             Count = 0;
-            Total = 0.0;
-            High = double.MinValue;
-            Low = double.MaxValue;
+            Total = 0.0f;
+            High = float.MinValue;
+            Low = float.MaxValue;
         }
-        public double Average
+        public float Average
         {
             get
             {
                 return Total / Count;
             }
         }
-        public void Add(double number)
+        public void Add(float number)
         {
             Total += number;
             Count += 1;

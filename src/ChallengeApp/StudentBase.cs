@@ -6,10 +6,10 @@ namespace ChallengeApp
 {
     public abstract class StudentBase : Person, IStudent
     {
-        public List<double> grades { get; set; }
+        public List<float> grades { get; set; }
         public StudentBase(string forname, string surname) : base(forname, surname)
         {
-            grades = new List<double>();
+            grades = new List<float>();
         }
         event IStudent.LessThenTreeDelegate IStudent.SendMessageLessThenThree
         {
@@ -24,7 +24,7 @@ namespace ChallengeApp
         }
         public delegate void LessThenTreeDelegate(object sender, EventArgs args);
         public abstract event LessThenTreeDelegate SendMessageLessThenThree;
-        public abstract void AddGrade(double grade);
+        public abstract void AddGrade(float grade);
         public abstract void AddGrade(string gradeName);
         public abstract void AddGradePlus(string grade);
         public abstract void AddGradeToFile(string grade, string fullFileName);

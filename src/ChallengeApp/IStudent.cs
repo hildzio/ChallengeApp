@@ -10,7 +10,7 @@ namespace ChallengeApp
         string Surname { get; set; }
         public delegate void LessThenTreeDelegate(object sender, EventArgs args);
         event LessThenTreeDelegate SendMessageLessThenThree;
-        void AddGrade(double grade);
+        void AddGrade(float grade);
         void AddGrade(string gradeName);
         void AddGradePlus(string grade);
         Statistics GetStatistics();
