@@ -14,29 +14,28 @@ namespace ChallengeApp
         public override event LessThenTreeDelegate SendMessageLessThenThree;
         public override void AddGrade(float grade)
         {
-            if (grade > 0 && grade <= 100)
+            if (grade >= 0 && grade <= 100)
             {
                 grades.Add(grade);
+                IfWithMsgEvent(grade);
             }
             else
             {
-                throw new Exception("Invalid value.");
-                throw new ArgumentException($"Invalid argument: {nameof(grade)}");
+                ThrowExeptionFloat(grade);
             }
         }
         public override void AddGrade(string gradeName)
         {
-            float grade;
-            float.TryParse(gradeName, out grade);
+            float.TryParse(gradeName, out var grade);
 
             if (!float.IsNaN(grade) && grade != 0)
             {
-                this.grades.Add(grade);
-                Console.WriteLine($"Dodano do listy ocen : " + grade);
+                AddGrade(grade);
+                Console.WriteLine($"Dodano do listy ocen : {grade}\n");
             }
             else
             {
-                Console.WriteLine("Błąd ! Nie można przekonwertować zmiennej na docelową ocenę");
+                ThrowExeptionString(gradeName);
             }
         }
         public override void AddGradePlus(string grade)
@@ -50,36 +49,23 @@ namespace ChallengeApp
                 {
                     case '+':
                         gradeFloat += 0.50f;
-                        AddGrade(gradeFloat);
-                        Console.WriteLine($"Dodano ocenę test " + gradeFloat);
-                        if (SendMessageLessThenThree != null && gradeFloat < 3)
-                        {
-                            SendMessageLessThenThree(this, new EventArgs());
-                        }
+                        AddGradeFloatWithMsgEvent(gradeFloat);
                         break;
 
                     case '-':
                         gradeFloat -= 0.25f;
-                        AddGrade(gradeFloat);
-                        Console.WriteLine($"Dodano ocenę " + gradeFloat);
-                        if (SendMessageLessThenThree != null && gradeFloat < 3)
-                        {
-                            SendMessageLessThenThree(this, new EventArgs());
-                        }
+                        AddGradeFloatWithMsgEvent(gradeFloat);
                         break;
                 }
             }
             else if (grade.Length == 1 && char.IsDigit(grade[0]) && gradeFloat >= 1 && gradeFloat <= 6)
             {
                 AddGrade(grade);
-                if (SendMessageLessThenThree != null && gradeFloat < 3)
-                {
-                    SendMessageLessThenThree(this, new EventArgs());
-                }
+                IfWithMsgEvent(gradeFloat);
             }
             else
             {
-                Console.WriteLine("Wprowadź poprawny format oceny. Wprowadzona ocena nie składa się z cyfry ; z cyfry z + lub - ; jest poza zakresem (1 - 6). Spróbuj jeszcze raz.");
+                ThrowExeptionString(grade);
             }
         }
         public override void AddGradeToFile(string grade, string fullFileName)
@@ -95,33 +81,24 @@ namespace ChallengeApp
                     case '+':
                         gradeFloat += 0.50f;
                         AddToFile(gradeFloat, fullFileName);
-                        if (SendMessageLessThenThree != null && gradeFloat < 3)
-                        {
-                            SendMessageLessThenThree(this, new EventArgs());
-                        }
+                        IfWithMsgEvent(gradeFloat);
                         break;
 
                     case '-':
                         gradeFloat -= 0.25f;
                         AddToFile(gradeFloat, fullFileName);
-                        if (SendMessageLessThenThree != null && gradeFloat < 3)
-                        {
-                            SendMessageLessThenThree(this, new EventArgs());
-                        }
+                        IfWithMsgEvent(gradeFloat);
                         break;
                 }
             }
             else if (gradeToFile.Length == 1 && char.IsDigit(gradeToFile[0]) && gradeFloat >= 1 && gradeFloat <= 6)
             {
                 AddToFile(gradeFloat, fullFileName);
-                if (SendMessageLessThenThree != null && gradeFloat < 3)
-                {
-                    SendMessageLessThenThree(this, new EventArgs());
-                }
+                IfWithMsgEvent(gradeFloat);
             }
             else
             {
-                Console.WriteLine("Wprowadź poprawny format oceny. Wprowadzona ocena nie składa się z cyfry ; z cyfry z + lub - ; jest poza zakresem (1 - 6). Spróbuj jeszcze raz.");
+                ThrowExeptionString(grade);
             }
         }
         public void AddToFile(float grade, string fullFileName)
@@ -136,6 +113,29 @@ namespace ChallengeApp
                 writer1.WriteLine($"{grade}        {DateTime.UtcNow}");
                 Console.WriteLine($"Dopisano {grade} do pliku audit.txt z datą {DateTime.UtcNow} \n\n");
             }
+        }
+        public void AddGradeFloatWithMsgEvent(float gradeFloat)
+        {
+            AddGrade(gradeFloat);
+            Console.WriteLine($"Dodano ocenę : {gradeFloat}\n");
+            IfWithMsgEvent(gradeFloat);
+        }
+        public void IfWithMsgEvent(float gradeFloat)
+        {
+            if (SendMessageLessThenThree != null && gradeFloat < 3)
+            {
+                SendMessageLessThenThree(this, new EventArgs());
+            }
+        }
+        public void ThrowExeptionFloat(float grade)
+        {
+            throw new Exception("Wprowadź poprawny format oceny.Wprowadzona ocena nie składa się z cyfry ; z cyfry z + lub - ; jest poza zakresem(1 - 6).Spróbuj jeszcze raz.");
+            throw new ArgumentException($"Invalid argument: {nameof(grade)}");
+        }
+        public void ThrowExeptionString(string gradeName)
+        {
+            throw new Exception("Wprowadź poprawny format oceny.Wprowadzona ocena nie składa się z cyfry ; z cyfry z + lub - ; jest poza zakresem(1 - 6).Spróbuj jeszcze raz.");
+            throw new ArgumentException($"Invalid argument: {nameof(gradeName)}");
         }
         public override Statistics GetStatistics(string fullFileName)
         {

@@ -92,6 +92,7 @@ namespace ChallengeApp
                                 else if (inputToFile.Length > 0 && inputToFile.Length <= 2 && char.IsDigit(inputToFile[0]))
                                 {
                                     savedStudent.AddGradeToFile(inputToFile, fullFileName);
+                                    savedStudent.SendMessageLessThenThree += OnSendMessageLessThenThree;
                                     Console.WriteLine($"Dla studenta {savedStudent.Forname} {savedStudent.Surname} przypisane są oceny : ");
                                     using (StreamReader sr = File.OpenText(fullFileName))
                                     {
@@ -161,6 +162,7 @@ namespace ChallengeApp
                                 else if (inputGradeToMemory.Length > 0 && inputGradeToMemory.Length <= 2 && char.IsDigit(inputGradeToMemory[0]))
                                 {
                                     inMemoryStudent.AddGradePlus(inputGradeToMemory);
+                                    inMemoryStudent.SendMessageLessThenThree += OnSendMessageLessThenThree;
                                     Console.WriteLine($"Dla studenta {inMemoryStudent.Forname} {inMemoryStudent.Surname} przypisane są oceny : ");
                                     List<float> inMemoryGrades = new List<float>();
                                     inMemoryGrades = inMemoryStudent.grades;
@@ -203,6 +205,9 @@ namespace ChallengeApp
         {
             Console.WriteLine("Wprowadź poprawne dane wybrane z menu i naciśnij Enter. Spróbuj jeszcze raz.");
         }
-
+        static void OnSendMessageLessThenThree(object sender, EventArgs args)
+        {
+            Console.WriteLine($"Otrzymana ocena jest poniżej 3 !!");
+        }
     }
 }

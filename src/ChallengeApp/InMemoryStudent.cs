@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System;
 using System.IO;
+using System.Diagnostics;
 
 namespace ChallengeApp
 {
@@ -16,15 +17,11 @@ namespace ChallengeApp
             if (grade >= 0 && grade <= 100)
             {
                 grades.Add(grade);
-                if (SendMessageLessThenThree != null)
-                {
-                    SendMessageLessThenThree(this, new EventArgs());
-                }
+                IfWithMsgEvent(grade);
             }
             else
             {
-                throw new Exception("Invalid value.");
-                throw new ArgumentException($"Invalid argument: {nameof(grade)}");
+                ThrowExeptionFloat(grade);
             }
         }
         public override void AddGrade(string gradeName)
@@ -33,11 +30,13 @@ namespace ChallengeApp
 
             if (!float.IsNaN(grade) && grade != 0)
             {
-                this.grades.Add(grade);
-                Console.WriteLine($"Dodano do listy ocen : " + grade);
-                return;
+                AddGrade(grade);
+                Console.WriteLine($"Dodano do listy ocen : {grade}\n");
             }
-            Console.WriteLine("Błąd ! Nie można przekonwertować zmiennej na docelową ocenę");
+            else
+            {
+                ThrowExeptionString(gradeName);
+            }
         }
         public override void AddGradePlus(string grade)
         {
@@ -50,37 +49,47 @@ namespace ChallengeApp
                 {
                     case '+':
                         gradeFloat += 0.50f;
-                        AddGrade(gradeFloat);
-                        Console.WriteLine($"Dodano ocenę : " + gradeFloat);
-                        if (SendMessageLessThenThree != null && gradeFloat < 3)
-                        {
-                            SendMessageLessThenThree(this, new EventArgs());
-                        }
+                        AddGradeFloatWithMsgEvent(gradeFloat);
                         break;
 
                     case '-':
                         gradeFloat -= 0.25f;
-                        AddGrade(gradeFloat);
-                        Console.WriteLine($"Dodano ocenę " + gradeFloat);
-                        if (SendMessageLessThenThree != null && gradeFloat < 3)
-                        {
-                            SendMessageLessThenThree(this, new EventArgs());
-                        }
+                        AddGradeFloatWithMsgEvent(gradeFloat);
                         break;
                 }
             }
             else if (grade.Length == 1 && char.IsDigit(grade[0]) && gradeFloat >= 1 && gradeFloat <= 6)
             {
                 AddGrade(grade);
-                if (SendMessageLessThenThree != null && gradeFloat < 3)
-                {
-                    SendMessageLessThenThree(this, new EventArgs());
-                }
+                IfWithMsgEvent(gradeFloat);
             }
             else
             {
-                Console.WriteLine("Wprowadź poprawny format oceny. Wprowadzona ocena nie składa się z cyfry ; z cyfry z + lub - ; jest poza zakresem (1 - 6). Spróbuj jeszcze raz.");
+                ThrowExeptionString(grade);
             }
+        }
+        public void AddGradeFloatWithMsgEvent(float gradeFloat)
+        {
+            AddGrade(gradeFloat);
+            Console.WriteLine($"Dodano ocenę : {gradeFloat}\n");
+            IfWithMsgEvent(gradeFloat);
+        }
+        public void IfWithMsgEvent(float gradeFloat)
+        {
+            if (SendMessageLessThenThree != null && gradeFloat < 3)
+            {
+                SendMessageLessThenThree(this, new EventArgs());
+            }
+        }
+        public void ThrowExeptionFloat(float grade)
+        {
+            throw new Exception("Wprowadź poprawny format oceny.Wprowadzona ocena nie składa się z cyfry ; z cyfry z + lub - ; jest poza zakresem(1 - 6).Spróbuj jeszcze raz.");
+            throw new ArgumentException($"Invalid argument: {nameof(grade)}");
+        }
+        public void ThrowExeptionString(string gradeName)
+        {
+            throw new Exception("Wprowadź poprawny format oceny.Wprowadzona ocena nie składa się z cyfry ; z cyfry z + lub - ; jest poza zakresem(1 - 6).Spróbuj jeszcze raz.");
+            throw new ArgumentException($"Invalid argument: {nameof(gradeName)}");
         }
         public override Statistics GetStatistics()
         {
