@@ -54,11 +54,11 @@ namespace ChallengeApp
         public static void SubMenuToFile()
         {
             Console.WriteLine("Podaj imię studenta któremu chcesz wystawić ocenę: ");
-            var inputForname = Console.ReadLine();
+            var inputname = Console.ReadLine();
             Console.WriteLine("Teraz podaj jego nazwisko: ");
             var inputSurname = Console.ReadLine();
-            var savedStudent = new SavedStudent(inputForname, inputSurname);
-            var fullFileName = $"{inputForname}_{inputSurname}_{GetEndOfFileName()}";
+            var savedStudent = new SavedStudent(inputname, inputSurname);
+            var fullFileName = $"{inputname}_{inputSurname}_{GetEndOfFileName()}";
 
             var backFromFile = false;
             while (!backFromFile)
@@ -93,18 +93,17 @@ namespace ChallengeApp
                                 {
                                     savedStudent.AddGradeToFile(inputToFile, fullFileName);
                                     savedStudent.SendMessageLessThenThree += OnSendMessageLessThenThree;
-                                    Console.WriteLine($"Dla studenta {savedStudent.Forname} {savedStudent.Surname} przypisane są oceny : ");
+                                    Console.WriteLine($"Dla studenta {savedStudent.Name} {savedStudent.Surname} przypisane są oceny : ");
                                     using (StreamReader sr = File.OpenText(fullFileName))
                                     {
                                         var line = sr.ReadLine();
                                         string GradesFileList = "";
                                         while (line != null)
                                         {
-                                            GradesFileList += ($"{line}; ");
+                                            GradesFileList += ($"; {line}");
                                             line = sr.ReadLine();
                                         }
-                                        GradesFileList = GradesFileList.TrimEnd();
-                                        GradesFileList = GradesFileList.TrimEnd(';');
+                                        GradesFileList = GradesFileList.TrimStart(';');
                                         Console.WriteLine($"{GradesFileList}\n\n");
                                     }
                                     savedStudent.GetStatistics(fullFileName);
@@ -126,10 +125,10 @@ namespace ChallengeApp
         public static void SubMenuToMemory()
         {
             Console.WriteLine("Podaj imię studenta któremu chcesz wystawić ocenę: ");
-            var inputForname = Console.ReadLine();
+            var inputname = Console.ReadLine();
             Console.WriteLine("Teraz podaj jego nazwisko: ");
             var inputSurname = Console.ReadLine();
-            var inMemoryStudent = new InMemoryStudent(inputForname, inputSurname);
+            var inMemoryStudent = new InMemoryStudent(inputname, inputSurname);
             var backFromMemory = false;
             while (!backFromMemory)
             {
@@ -161,20 +160,19 @@ namespace ChallengeApp
                                 }
                                 else if (inputGradeToMemory.Length > 0 && inputGradeToMemory.Length <= 2 && char.IsDigit(inputGradeToMemory[0]))
                                 {
-                                    inMemoryStudent.AddGradePlus(inputGradeToMemory);
+                                    inMemoryStudent.AddGrade(inputGradeToMemory);
                                     inMemoryStudent.SendMessageLessThenThree += OnSendMessageLessThenThree;
-                                    Console.WriteLine($"Dla studenta {inMemoryStudent.Forname} {inMemoryStudent.Surname} przypisane są oceny : ");
+                                    Console.WriteLine($"Dla studenta {inMemoryStudent.Name} {inMemoryStudent.Surname} przypisane są oceny : ");
                                     List<float> inMemoryGrades = new List<float>();
                                     inMemoryGrades = inMemoryStudent.grades;
                                     string GradesMemoryList = "";
                                     for (var i = 0; i < inMemoryGrades.Count; i++)
                                     {
-                                        GradesMemoryList += ($"{inMemoryGrades[i]}; ");
+                                        GradesMemoryList += ($"; {inMemoryGrades[i]}");
                                     }
-                                    GradesMemoryList = GradesMemoryList.TrimEnd();
-                                    GradesMemoryList = GradesMemoryList.TrimEnd(';');
+                                    GradesMemoryList = GradesMemoryList.TrimStart(';');
                                     Console.Write($"{GradesMemoryList}\n\n");
-                                    inMemoryStudent.GetStatistics();
+                                    inMemoryStudent.GetStatistics();                                    
                                 }
                                 else
                                 {

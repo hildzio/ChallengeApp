@@ -6,11 +6,11 @@ namespace ChallengeApp
 {
     public class Person
     {
-        public string Forname { get; set; }
+        public string Name { get; set; }
         public string Surname { get; set; }
-        public Person(string forname, string surname)
+        public Person(string name, string surname)
         {
-            this.Forname = forname;
+            this.Name = name;
             this.Surname = surname;
         }
     }

@@ -2,70 +2,73 @@ using System.Collections.Generic;
 using System;
 using System.IO;
 using System.Diagnostics;
+using System.Reflection.Metadata.Ecma335;
 
 namespace ChallengeApp
 {
     public class InMemoryStudent : StudentBase
     {
+        public List<float> grades { get; set; }
         public InMemoryStudent(string forname, string surname) : base(forname, surname)
         {
             grades = new List<float>();
         }
         public override event LessThenTreeDelegate SendMessageLessThenThree;
-        public override void AddGrade(float grade)
+        public void AddGrade(float grade)
         {
-            if (grade >= 0 && grade <= 100)
+            try
             {
-                grades.Add(grade);
-                IfWithMsgEvent(grade);
-            }
-            else
-            {
-                ThrowExeptionFloat(grade);
-            }
-        }
-        public override void AddGrade(string gradeName)
-        {
-            float.TryParse(gradeName, out var grade);
-
-            if (!float.IsNaN(grade) && grade != 0)
-            {
-                AddGrade(grade);
-                Console.WriteLine($"Dodano do listy ocen : {grade}\n");
-            }
-            else
-            {
-                ThrowExeptionString(gradeName);
-            }
-        }
-        public override void AddGradePlus(string grade)
-        {
-            var gradeEmpty = grade.Replace("+", String.Empty).Replace("-", String.Empty);
-            var gradeFloat = float.Parse(gradeEmpty);
-
-            if (grade.Length == 2 && char.IsDigit(grade[0]) && grade[0] >= '1' && grade[0] <= '6' && (grade.Contains("+") || grade.Contains("-")))
-            {
-                switch (grade[1])
+                if (grade >= 0 && grade <= 7)
                 {
-                    case '+':
-                        gradeFloat += 0.50f;
-                        AddGradeFloatWithMsgEvent(gradeFloat);
-                        break;
-
-                    case '-':
-                        gradeFloat -= 0.25f;
-                        AddGradeFloatWithMsgEvent(gradeFloat);
-                        break;
+                    grades.Add(grade);
+                    IfWithMsgEvent(grade);
+                }
+                else
+                {
+                    throw new FormatException();
                 }
             }
-            else if (grade.Length == 1 && char.IsDigit(grade[0]) && gradeFloat >= 1 && gradeFloat <= 6)
+            catch (FormatException e)
             {
-                AddGrade(grade);
-                IfWithMsgEvent(gradeFloat);
+                Console.WriteLine($"Wprowadź poprawny format oceny.Wprowadzona ocena nie składa się z cyfry ; z cyfry z + lub - ; jest poza zakresem(1 - 6).Spróbuj jeszcze raz.");
             }
-            else
+        }
+        public void AddGrade(string grade)
+        {
+            try
             {
-                ThrowExeptionString(grade);
+                var gradeEmpty = grade.Replace("+", String.Empty).Replace("-", String.Empty);
+                var gradeFloat = float.Parse(gradeEmpty);
+
+                if (grade.Length == 2 && char.IsDigit(grade[0]) && grade[0] >= '1' && grade[0] <= '6' && (grade.Contains("+") || grade.Contains("-")))
+                {
+                    switch (grade[1])
+                    {
+                        case '+':
+                            gradeFloat += 0.50f;
+                            AddGradeFloatWithMsgEvent(gradeFloat);
+                            break;
+
+                        case '-':
+                            gradeFloat -= 0.25f;
+                            AddGradeFloatWithMsgEvent(gradeFloat);
+                            break;
+                    }
+                }
+                else if (grade.Length == 1 && char.IsDigit(grade[0]) && gradeFloat >= 1 && gradeFloat <= 6)
+                {
+                    var parsedGrade = float.Parse(grade);
+                    AddGrade(parsedGrade);
+                    IfWithMsgEvent(gradeFloat);
+                }
+                else
+                {
+                    throw new FormatException();
+                }
+            }
+            catch (FormatException e)
+            {
+                Console.WriteLine($"Wprowadź poprawny format oceny.Wprowadzona ocena nie składa się z cyfry ; z cyfry z + lub - ; jest poza zakresem(1 - 6).Spróbuj jeszcze raz.");
             }
         }
         public void AddGradeFloatWithMsgEvent(float gradeFloat)
@@ -81,16 +84,6 @@ namespace ChallengeApp
                 SendMessageLessThenThree(this, new EventArgs());
             }
         }
-        public void ThrowExeptionFloat(float grade)
-        {
-            throw new Exception("Wprowadź poprawny format oceny.Wprowadzona ocena nie składa się z cyfry ; z cyfry z + lub - ; jest poza zakresem(1 - 6).Spróbuj jeszcze raz.");
-            throw new ArgumentException($"Invalid argument: {nameof(grade)}");
-        }
-        public void ThrowExeptionString(string gradeName)
-        {
-            throw new Exception("Wprowadź poprawny format oceny.Wprowadzona ocena nie składa się z cyfry ; z cyfry z + lub - ; jest poza zakresem(1 - 6).Spróbuj jeszcze raz.");
-            throw new ArgumentException($"Invalid argument: {nameof(gradeName)}");
-        }
         public override Statistics GetStatistics()
         {
             var statistics = new Statistics();
@@ -98,19 +91,10 @@ namespace ChallengeApp
             {
                 statistics.Add(grades[i]);
             }
-            Console.WriteLine($"TOP **************** Statystyki ******************* TOP\n" +
-                              $"Na temat ucznia mamy informacje : \n" +
+            Console.WriteLine($"Na temat ucznia mamy informacje : \n" +
                               $"Średnia ocen jest równa : {statistics.Average:N2}\n" +
                               $"Najniż1sza ocena jest równa : {statistics.Low}\n" +
-                              $"Najwyższa ocena jest równa  : {statistics.High}\n" +
-                              $"END ***************  Statystyki ******************* END\n\n");
-            return statistics;
-        }
-        public override void AddGradeToFile(string grade, string fullFileName) { }
-        public static void AddToFile(float grade) { }
-        public override Statistics GetStatistics(string fullFileName)
-        {
-            var statistics = new Statistics();
+                              $"Najwyższa ocena jest równa  : {statistics.High}\n\n");
             return statistics;
         }
     }
