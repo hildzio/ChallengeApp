@@ -8,12 +8,12 @@
 	//6. Metody AddGrade(float grade) i AddGrade(string gradeName) i AddGradePlus(string grade) są identyczna w obu klasach, a tak nie powinno być bo w klasie Saved powinieneś pracować na pliku a nie na liście. To nie chodziło o to by dodawać nową metodę AddGradeToFile(string grade, string fullFileName) i tam dodawać oceny do pliku. Czy widziałeś mój kod albo Damiana? Zawsze warto się wzorować, nie mam problemu z podkradaniem pomysłu i implementacji pod warunkiem, ze rozumiesz co przepisujesz.
 	//https://github.com/zuzia-m/Grades
 
-7. Medody ThrowExeptionFloat i ThrowExeptionString są bez sensu bo tam jest tylko jedna linijka do wykonania, druga nigdy nie bedzie wykonana i bez sensu to akurat pakować w metodę. No i jak rzucasz te wyjątki to ich nie łapiesz i jak się wpisze złą ocenę to wywala aplikację, a tak być nie powinno.
-	?? // 8. Metoda GetStatistics też jest niepotrzebnie powielona, powinna być jedna, ale z osobnymi implementacjami dla każdej klasy.
+	//7. Medody ThrowExeptionFloat i ThrowExeptionString są bez sensu bo tam jest tylko jedna linijka do wykonania, druga nigdy nie bedzie wykonana i bez sensu to akurat pakować w metodę. No i jak rzucasz te wyjątki to ich nie łapiesz i jak się wpisze złą ocenę to wywala aplikację, a tak być nie powinno.
+	// 8. Metoda GetStatistics też jest niepotrzebnie powielona, powinna być jedna, ale z osobnymi implementacjami dla każdej klasy.
 	
 	//9. Metody AddGradeToFile i AddToFile są zbędne ogólnie (pisałam już o tym wyżej) a tymbardziej w klasie InMemory, bo masz je tam puste - tak być nie może. To samo z GetStatistics() - w jednej klasie zwracasz z tej metody pusty obiekt a statystyki liczysz w tej przeciążonej, a w innej odwrotnie. Przecież wystarczy jedna metoda z różnymi implementacjami.
 
 10. Generalnie to jak już poprawisz wyżej wymienione punkty to pomyśl o tym by ograniczyć powtarzający się kod, taki jak wypisanie statystyk - to mogłaby być jedna metoda w klasie bazowej bez potrzeby pisania jej 2x w dwóch klasach.
-11. Ten const FileName powinien być w klasie Saved i wtedy obyłoby się bez przeciania metody z tą nazwą pliku.
+	// 11. Ten const FileName powinien być w klasie Saved i wtedy obyłoby się bez przeciania metody z tą nazwą pliku.
 12. Klasa Program też jest mocno rozbudowana i mogłaby zostać uproszczona, moim zdaniem są niepotrzebne 2 różne metody z menu dla pliku i dla pamięci.
-13. Program wywala się jak podam przypadkowo np. ocenę 2= zamiast 2- a tak też być nie powinno :P
+	// 13. Program wywala się jak podam przypadkowo np. ocenę 2= zamiast 2- a tak też być nie powinno :P

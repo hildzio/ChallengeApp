@@ -8,9 +8,11 @@ namespace ChallengeApp
     {
         string Name { get; set; }
         string Surname { get; set; }
-        public delegate void LessThenTreeDelegate(object sender, EventArgs args);
+        delegate void LessThenTreeDelegate(object sender, EventArgs args);
         event LessThenTreeDelegate SendMessageLessThenThree;
+        void AddGrade(float grade);
+        void AddGrade(string grade);
+        void AddGradeFloatWithMsgEvent(float gradeFloat);
         Statistics GetStatistics();
-        Statistics GetStatistics(string fullFileName);
     }
 }

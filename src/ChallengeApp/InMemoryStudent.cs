@@ -9,19 +9,18 @@ namespace ChallengeApp
     public class InMemoryStudent : StudentBase
     {
         public List<float> grades { get; set; }
-        public InMemoryStudent(string forname, string surname) : base(forname, surname)
+        public InMemoryStudent(string name, string surname) : base(name, surname)
         {
             grades = new List<float>();
         }
         public override event LessThenTreeDelegate SendMessageLessThenThree;
-        public void AddGrade(float grade)
+        public override void AddGrade(float grade)
         {
             try
             {
                 if (grade >= 0 && grade <= 7)
                 {
                     grades.Add(grade);
-                    IfWithMsgEvent(grade);
                 }
                 else
                 {
@@ -33,7 +32,7 @@ namespace ChallengeApp
                 Console.WriteLine($"Wprowadź poprawny format oceny.Wprowadzona ocena nie składa się z cyfry ; z cyfry z + lub - ; jest poza zakresem(1 - 6).Spróbuj jeszcze raz.");
             }
         }
-        public void AddGrade(string grade)
+        public override void AddGrade(string grade)
         {
             try
             {
@@ -58,8 +57,8 @@ namespace ChallengeApp
                 else if (grade.Length == 1 && char.IsDigit(grade[0]) && gradeFloat >= 1 && gradeFloat <= 6)
                 {
                     var parsedGrade = float.Parse(grade);
-                    AddGrade(parsedGrade);
-                    IfWithMsgEvent(gradeFloat);
+                    AddGradeFloatWithMsgEvent(parsedGrade);
+
                 }
                 else
                 {
@@ -71,14 +70,10 @@ namespace ChallengeApp
                 Console.WriteLine($"Wprowadź poprawny format oceny.Wprowadzona ocena nie składa się z cyfry ; z cyfry z + lub - ; jest poza zakresem(1 - 6).Spróbuj jeszcze raz.");
             }
         }
-        public void AddGradeFloatWithMsgEvent(float gradeFloat)
+        public override void AddGradeFloatWithMsgEvent(float gradeFloat)
         {
             AddGrade(gradeFloat);
             Console.WriteLine($"Dodano ocenę : {gradeFloat}\n");
-            IfWithMsgEvent(gradeFloat);
-        }
-        public void IfWithMsgEvent(float gradeFloat)
-        {
             if (SendMessageLessThenThree != null && gradeFloat < 3)
             {
                 SendMessageLessThenThree(this, new EventArgs());

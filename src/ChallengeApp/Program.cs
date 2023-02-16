@@ -9,11 +9,6 @@ namespace ChallengeApp
 {
     class Program
     {
-        private const string constFileName = "grades.txt";
-        private static string GetEndOfFileName()
-        {
-            return constFileName;
-        }
         static void Main(string[] args)
         {
             var quitApp = false;
@@ -58,8 +53,6 @@ namespace ChallengeApp
             Console.WriteLine("Teraz podaj jego nazwisko: ");
             var inputSurname = Console.ReadLine();
             var savedStudent = new SavedStudent(inputname, inputSurname);
-            var fullFileName = $"{inputname}_{inputSurname}_{GetEndOfFileName()}";
-
             var backFromFile = false;
             while (!backFromFile)
             {
@@ -91,10 +84,10 @@ namespace ChallengeApp
                                 }
                                 else if (inputToFile.Length > 0 && inputToFile.Length <= 2 && char.IsDigit(inputToFile[0]))
                                 {
-                                    savedStudent.AddGradeToFile(inputToFile, fullFileName);
+                                    savedStudent.AddGrade(inputToFile);
                                     savedStudent.SendMessageLessThenThree += OnSendMessageLessThenThree;
                                     Console.WriteLine($"Dla studenta {savedStudent.Name} {savedStudent.Surname} przypisane są oceny : ");
-                                    using (StreamReader sr = File.OpenText(fullFileName))
+                                    using (StreamReader sr = File.OpenText(savedStudent.GetFileName()))
                                     {
                                         var line = sr.ReadLine();
                                         string GradesFileList = "";
@@ -106,7 +99,7 @@ namespace ChallengeApp
                                         GradesFileList = GradesFileList.TrimStart(';');
                                         Console.WriteLine($"{GradesFileList}\n\n");
                                     }
-                                    savedStudent.GetStatistics(fullFileName);
+                                    savedStudent.GetStatistics();
                                 }
                                 else
                                 {
@@ -172,7 +165,7 @@ namespace ChallengeApp
                                     }
                                     GradesMemoryList = GradesMemoryList.TrimStart(';');
                                     Console.Write($"{GradesMemoryList}\n\n");
-                                    inMemoryStudent.GetStatistics();                                    
+                                    inMemoryStudent.GetStatistics();
                                 }
                                 else
                                 {
